@@ -125,6 +125,16 @@ if(empty($username)): ?>
 		        <option value="on">Pingbacks Enabled</option>
 		    </select>
 		    </div>
+			
+			<div>
+		    <label for="category">Category</label>
+		    <input name="category" id="category" value="uncategorized"/>
+		    </div>
+			
+			<div>
+		    <label for="add-types-as-categories">Add Types as Categories</label>
+		    <input type="checkbox" name="add-types-as-categories" id="add-types-as-categories"/>
+		    </div>
     	</fieldset>
     	<fieldset>
     	    <legend>Ready?</legend>
@@ -245,6 +255,9 @@ else {
     $pings = 'closed';
 }
 
+$category = $_REQUEST['category'];
+$add_types_as_categories = $_REQUEST['add-types-as-categories'];
+
 # OK. Query the Tumblr API for the posts and get them all in 50-post batches:
 try {
     do {
@@ -349,7 +362,7 @@ function removeWeirdChars($str)
 	return trim(preg_replace('{(-)\1+}','$1',preg_replace('/[^a-zA-Z0-9-]/', '', str_replace(' ','-',strtolower(strip_tags($str))))),'-');
 }
 
-function getTags($post)
+function getCategories($post)
 {
 	if($post->attributes()->type)
 	{
@@ -361,6 +374,10 @@ function getTags($post)
 		echo "<category><![CDATA[Uncategorized]]></category>\n";
 		echo "\t\t<category domain=\"category\" nicename=\"uncategorized\"><![CDATA[Uncategorized]]></category>\n";
 	}
+}
+
+function getTags($post)
+{
 	if($post->tag)
 	{
 		foreach($post->tag as $tag)
@@ -549,9 +566,9 @@ header("content-disposition: attachment; filename=tumblr_$username.xml");
 	<wp:base_site_url>http://<?php echo $feed->tumblelog->attributes()->name ?>.tumblr.com/</wp:base_site_url>
 	<wp:base_blog_url>http://<?php echo $feed->tumblelog->attributes()->name ?>.tumblr.com/</wp:base_blog_url>
 	<wp:category>
-		<wp:category_nicename>uncategorized</wp:category_nicename>
+		<wp:category_nicename><?php echo $category ?></wp:category_nicename>
 		<wp:category_parent></wp:category_parent>
-		<wp:cat_name><![CDATA[Uncategorized]]></wp:cat_name>
+		<wp:cat_name><![CDATA[<?php echo ucwords(str_replace('-',' ',$category)) ?>]]></wp:cat_name>
 	</wp:category>
 
 <?php
@@ -566,6 +583,11 @@ header("content-disposition: attachment; filename=tumblr_$username.xml");
 		<link><?php echo $post->attributes()->url ?></link>
 		<pubDate><?php echo $post->attributes()->date ?> +0000</pubDate>
 		<dc:creator><![CDATA[post_author]]></dc:creator>
+		<?php if($add_types_as_categories){ getCategories($post); } ?>
+		<?php if($category){ 
+			echo "<category><![CDATA[" . ucwords(str_replace('-',' ',$category)) . "]]></category>\n";
+			echo "\t\t<category domain=\"category\" nicename=\"" . $category . "\"><![CDATA[" . ucwords(str_replace('-',' ',$category)) . "]]></category>\n";
+		} ?>
 		<?php getTags($post) ?>
 		<guid isPermaLink="false"><?php echo $post->attributes()->url ?></guid>
 		<!--<wp:post_id><?php echo $post->attributes()->id ?></wp:post_id>-->
