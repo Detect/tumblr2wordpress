@@ -619,6 +619,7 @@ FIGURE;
 		<content:encoded><![CDATA[<?php echo $image; ?>
 		<?php echo formatForWP($post_content) ?>]]></content:encoded>
 		<wp:post_name><?php echo formatPermalinkSlug($post->attributes()->id, $post->{'photo-caption'}) ?></wp:post_name>
+		<category domain="post_format" nicename="post-format-image"><![CDATA[Image]]></category>
 <?php
 			break;
 
@@ -640,6 +641,7 @@ FIGURE;
 
 		<?php echo formatForWP($post_content) ?>]]></content:encoded>
 		<wp:post_name><?php echo formatPermalinkSlug($post->attributes()->id, str_replace('&#8220;','',str_replace('&#8221;','',$post->{'quote-text'}))) ?></wp:post_name>
+		<category domain="post_format" nicename="post-format-quote"><![CDATA[Quote]]></category>
 <?php
 			break;
 
@@ -650,6 +652,7 @@ FIGURE;
 
 		<?php echo formatForWP($post->{'link-description'}) ?>]]></content:encoded>
 		<wp:post_name><?php echo formatPermalinkSlug($post->attributes()->id, $post->{'link-text'}) ?></wp:post_name>
+		<category domain="post_format" nicename="post-format-link"><![CDATA[Link]]></category>
 <?php
 			break;
 
@@ -665,6 +668,7 @@ FIGURE;
 		        ?></q><br>
 		    <?php } ?>]]></content:encoded>
 		<wp:post_name><?php echo formatPermalinkSlug($post->attributes()->id, $post->{'conservation-title'}) ?></wp:post_name>
+		<category domain="post_format" nicename="post-format-chat"><![CDATA[Chat]]></category>
 <?php
 			break;
 
@@ -684,6 +688,7 @@ FIGURE;
 	    <?php echo $post_content ?>
 	    ]]></content:encoded>
 		<wp:post_name><?php echo formatPermalinkSlug($post->attributes()->id, $post->{'video-caption'}) ?></wp:post_name>
+		<category domain="post_format" nicename="post-format-video"><![CDATA[Video]]></category>
 <?php
 			break;
 
@@ -698,6 +703,7 @@ FIGURE;
 
 		<?php echo $post_content ?>]]></content:encoded>
 		<wp:post_name><?php echo formatPermalinkSlug($post->attributes()->id, $post->{'audio-caption'}) ?></wp:post_name>
+		<category domain="post_format" nicename="post-format-audio"><![CDATA[Audio]]></category>
 <?php
 			break;
 		}
